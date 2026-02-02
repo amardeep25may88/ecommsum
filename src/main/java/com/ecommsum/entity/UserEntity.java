@@ -23,6 +23,4 @@ public class UserEntity {
     private String role;
     private boolean isActive;
 
-
-
 }
