@@ -10,4 +10,6 @@ public class EcommsumApplication {
 		SpringApplication.run(EcommsumApplication.class, args);
 	}
 
+
+
 }
