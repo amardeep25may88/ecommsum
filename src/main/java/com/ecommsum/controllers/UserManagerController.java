@@ -28,27 +28,30 @@ public class UserManagerController {
     private JwtService jwtService;
 
     @GetMapping("/home")
-    public String home(){return "home !";}
+    public ResponseEntity<String> home(){ return ResponseEntity.ok("home"); }
 
     @GetMapping("/listAll")
-    public List<UserEntity> getUsers(){ return userEntityService.getAllUsers(); }
+    public ResponseEntity<List<UserEntity>> getUsers(){ return ResponseEntity.ok(userEntityService.getAllUsers()); }
 
     @GetMapping("/{userId}")
-    public Optional<UserEntity> getUserById(@PathVariable Long userId){ return userEntityService.getUserById(userId); }
+    public ResponseEntity<Optional<UserEntity>>getUserById(@PathVariable Long userId){ return ResponseEntity.ok(userEntityService.getUserById(userId)); }
 
     @PostMapping("/create")
     public UserEntity createNewUser(@RequestBody UserEntity userEntity){ return userEntityService.createNewUser(userEntity); }
 
     @PostMapping("/jwtauthentication")
-    public String jwtAuthentication(@RequestBody JwtAuthRequest jwtAuthRequest){
+    public ResponseEntity<String> jwtAuthentication(@RequestBody JwtAuthRequest jwtAuthRequest){
         String token="";
         Authentication authentication = authenticationManager.authenticate( new UsernamePasswordAuthenticationToken(
                jwtAuthRequest.getUserName(),jwtAuthRequest.getPassword()
         ));
-        if(authentication.isAuthenticated())
-            return token="JWT_Token ::: => "+jwtService.generateJwtToken(jwtAuthRequest.getUserName());
-        else
-            return token="JWT_Token ::: => [error in creating token]";
+        if(authentication.isAuthenticated()) {
+            token = "JWT_Token ::: => " + jwtService.generateJwtToken(jwtAuthRequest.getUserName());
+            return ResponseEntity.ok(token);
+        }else {
+            token = "JWT_Token ::: => [error in creating token]";
+            return ResponseEntity.ok(token);
+        }
     }
 
 
